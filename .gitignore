@@ -1,0 +1,58 @@
+### Laravel framework + project ###
+
+# Local environment + secrets
+.env
+.env.backup
+.env.production
+.env.*.local
+
+# Composer / npm
+/node_modules
+/vendor
+composer.phar
+
+# Build artifacts
+/public/build
+/public/hot
+/public/storage
+/public/fonts-manifest.dev.json
+
+# Runtime files (Laravel writes these)
+/storage/*.key
+/storage/logs/*.log
+/storage/pail
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+# Keep .gitkeep placeholders so the dirs survive a fresh clone
+!storage/framework/cache/.gitkeep
+!storage/framework/sessions/.gitkeep
+!storage/framework/views/.gitkeep
+!storage/logs/.gitkeep
+
+# IDE / editor
+.idea
+.vscode
+.codex
+.cursor/
+.zed
+.nova
+.nova/
+.phpunit.cache
+.phpunit.result.cache
+.phpactor.json
+_ide_helper.php
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Other
+auth.json
+Homestead.json
+Homestead.yaml
+*.log
+*.bak
+*~
+/ignore
