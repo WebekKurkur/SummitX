@@ -12,6 +12,29 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-[var(--color-offwhite)] text-[var(--color-charcoal)] antialiased">
+    {{-- Mobile top bar (<lg) — hamburger toggles admin drawer --}}
+    <header data-admin-header class="sticky top-0 z-[60] flex items-center justify-between border-b border-black/5 bg-white/90 px-6 py-4 backdrop-blur lg:hidden">
+        <button
+            type="button"
+            data-admin-drawer-open
+            class="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--color-charcoal)] transition hover:bg-black/5"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="admin-drawer"
+        >
+            <svg data-admin-icon-menu class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/>
+            </svg>
+            <svg data-admin-icon-close class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <a href="{{ route('admin.dashboard') }}" class="font-display text-lg font-bold tracking-tight text-[var(--color-charcoal)]">
+            SummitX
+        </a>
+        <span class="h-10 w-10" aria-hidden="true"></span>
+    </header>
+
     <div class="flex min-h-screen">
         @include('admin.partials.sidebar')
 

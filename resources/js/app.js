@@ -24,6 +24,7 @@ ready(() => {
     initTransactionModal();
     initArticleEditor();
     initConfirmDialog();
+    initAdminSidebar();
 });
 
 function initRevealOnScroll() {
@@ -1539,4 +1540,71 @@ function initAdminFilter() {
             );
         });
     });
+}
+
+function initAdminSidebar() {
+    const openBtn = document.querySelector('[data-admin-drawer-open]');
+    const closeBtn = document.querySelector('[data-admin-drawer-close]');
+    const drawer = document.querySelector('[data-admin-drawer]');
+    const overlay = document.querySelector('[data-admin-overlay]');
+    if (!drawer) return;
+
+    const iconMenu = document.querySelector('[data-admin-icon-menu]');
+    const iconClose = document.querySelector('[data-admin-icon-close]');
+
+    let isOpen = false;
+
+    const setOpen = (open) => {
+        isOpen = open;
+        drawer.classList.toggle('-translate-x-full', !open);
+        drawer.classList.toggle('translate-x-0', open);
+        if (overlay) {
+            overlay.classList.toggle('opacity-0', !open);
+            overlay.classList.toggle('opacity-100', open);
+            overlay.setAttribute('aria-hidden', String(!open));
+        }
+        document.documentElement.classList.toggle('overflow-hidden', open);
+        if (openBtn) openBtn.setAttribute('aria-expanded', String(open));
+        if (openBtn) openBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (iconMenu) iconMenu.classList.toggle('hidden', open);
+        if (iconClose) iconClose.classList.toggle('hidden', !open);
+    };
+
+    // Sync initial visual state without flipping isOpen
+    drawer.classList.add('-translate-x-full');
+    drawer.classList.remove('translate-x-0');
+    if (overlay) {
+        overlay.classList.add('opacity-0');
+        overlay.classList.remove('opacity-100');
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    // Hamburger toggles open <-> close
+    openBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(!isOpen);
+    });
+    closeBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(false);
+    });
+    overlay?.addEventListener('click', () => setOpen(false));
+
+    // Close on link tap (so navigation feels natural)
+    drawer.querySelectorAll('a').forEach((a) =>
+        a.addEventListener('click', () => setOpen(false)),
+    );
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setOpen(false);
+    });
+
+    // Reset when crossing to desktop breakpoint
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const onChange = (e) => { if (e.matches) setOpen(false); };
+    mq.addEventListener?.('change', onChange);
+    mq.addListener?.(onChange);
 }
