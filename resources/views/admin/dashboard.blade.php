@@ -98,7 +98,7 @@
                 </select>
             </div>
 
-            <div class="mt-8 flex h-64 items-end gap-3" role="img" aria-label="Monthly revenue bar chart">
+            <div class="mt-8 flex h-64 gap-3" role="img" aria-label="Monthly revenue bar chart">
                 @foreach ($months as $i => $m)
                     @php
                         $heightPct = max(8, round(($m['value'] / $maxRevenue) * 100));
@@ -107,7 +107,7 @@
                         <div class="relative flex h-full w-full items-end">
                             <div
                                 class="w-full rounded-t-xl bg-[var(--color-forest)]/20 transition-colors group-hover:bg-[var(--color-forest)]"
-                                @style(['height' => $heightPct . '%'])
+                                style="height: {{ $heightPct }}%"
                                 aria-hidden="true"
                             ></div>
                             <span class="pointer-events-none absolute inset-x-0 -top-7 text-center text-xs font-semibold text-[var(--color-charcoal)] opacity-0 transition group-hover:opacity-100">

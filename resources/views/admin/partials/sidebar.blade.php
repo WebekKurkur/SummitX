@@ -14,12 +14,17 @@
         'user'      => '<circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>',
         'transaction' => '<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20" stroke-linecap="round"/><path d="M6 15h4" stroke-linecap="round"/>',
         'logout'    => '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round"/>',
+        'close'     => '<path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>',
     ];
 
     $active = $active ?? request()->route()?->getName() ?? 'admin.dashboard';
 @endphp
 
-<aside class="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-black/5 bg-white lg:flex">
+{{-- Desktop sidebar (≥lg) --}}
+<aside
+    data-admin-sidebar
+    class="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-black/5 bg-white lg:flex"
+>
     <div class="px-8 py-8">
         <a href="{{ route('admin.dashboard') }}" class="font-display text-2xl font-bold tracking-tight text-[var(--color-charcoal)]">
             SummitX
@@ -27,32 +32,54 @@
         <p class="mt-2 text-sm text-[var(--color-charcoal)]/60">Admin System</p>
     </div>
 
-    <nav aria-label="Admin navigation" class="flex-1 px-6">
-        <ul class="flex flex-col gap-1">
-            @foreach ($items as $item)
-                @php $isActive = $item['route'] === $active; @endphp
-                <li>
-                    <a
-                        href="{{ $item['href'] }}"
-                        @if ($isActive) aria-current="page" @endif
-                        class="
-                            flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition
-                            @if ($isActive)
-                                bg-[var(--color-charcoal)] text-white
-                            @else
-                                text-[var(--color-charcoal)]/70 hover:bg-black/5 hover:text-[var(--color-charcoal)]
-                            @endif
-                        "
-                    >
-                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                            {!! $iconPaths[$item['icon']] !!}
-                        </svg>
-                        {{ $item['label'] }}
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-    </nav>
+    @include('admin.partials._nav-list')
+
+    <div class="border-t border-black/5 p-6">
+        <a
+            href="/"
+            class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-[var(--color-charcoal)]/70 transition hover:bg-black/5 hover:text-[var(--color-charcoal)]"
+        >
+            <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                {!! $iconPaths['logout'] !!}
+            </svg>
+            Logout
+        </a>
+    </div>
+</aside>
+
+{{-- Mobile drawer (<lg) --}}
+<div
+    data-admin-overlay
+    class="fixed inset-0 z-40 bg-black/50 opacity-0 transition-opacity duration-300 lg:hidden"
+    aria-hidden="true"
+></div>
+
+<aside
+    data-admin-drawer
+    id="admin-drawer"
+    class="fixed inset-y-0 left-0 z-50 flex h-full w-72 -translate-x-full flex-col border-r border-black/5 bg-white transition-transform duration-300 ease-in-out lg:hidden"
+    aria-label="Admin navigation"
+>
+    <div class="flex items-center justify-between px-8 py-8">
+        <div>
+            <a href="{{ route('admin.dashboard') }}" class="font-display text-2xl font-bold tracking-tight text-[var(--color-charcoal)]">
+                SummitX
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-charcoal)]/60">Admin System</p>
+        </div>
+        <button
+            type="button"
+            data-admin-drawer-close
+            class="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--color-charcoal)]/70 transition hover:bg-black/5 hover:text-[var(--color-charcoal)]"
+            aria-label="Close menu"
+        >
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                {!! $iconPaths['close'] !!}
+            </svg>
+        </button>
+    </div>
+
+    @include('admin.partials._nav-list')
 
     <div class="border-t border-black/5 p-6">
         <a
